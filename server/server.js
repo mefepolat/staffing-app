@@ -8,6 +8,10 @@ const MongoStore = require('connect-mongo');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const User = require('./models/user');
+const ExpressError = require('./utils/ExpressError');
+
+
 app.use(
     cors({
         origin: "http://localhost:3001",
@@ -60,3 +64,23 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser();
+passport.deSerializeUser();
+
+app.get('/api/session', (req,res) => {
+    const session = req.session;
+
+    if(session && session.user){
+        res.json({loggedIn: true, user:session});
+    } else {
+        res.json({loggedIn: false});
+    }
+});
+
+app.all('*', (req,res,next) => {
+    next(new ExpressError('Page Not Found', 404));
+});
+
+app.listen(5000, () => {
+    console.log('server is running on port 5000');
+})
