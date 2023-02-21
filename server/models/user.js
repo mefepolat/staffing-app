@@ -14,6 +14,11 @@ const userSchema = new Schema({
         required: true,
         unique: true
     },
+    phoneNumber: {
+        type: Number,
+        required: true,
+        unique: true
+    },
     employer: {
         type: Boolean,
         default: false
