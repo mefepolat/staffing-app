@@ -10,6 +10,9 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const User = require('./models/user');
 const ExpressError = require('./utils/ExpressError');
+const passport = require('passport');
+
+
 
 
 app.use(
@@ -64,8 +67,16 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser();
-passport.deSerializeUser();
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+  });
+  
+  passport.deserializeUser((id, done) => {
+    User.findById(id, (err, user) => {
+      done(err, user);
+    });
+  });
+  
 
 app.get('/api/session', (req,res) => {
     const session = req.session;
@@ -81,6 +92,8 @@ app.all('*', (req,res,next) => {
     next(new ExpressError('Page Not Found', 404));
 });
 
-app.listen(5000, () => {
-    console.log('server is running on port 5000');
+app.listen(5001, () => {
+    console.log('server is running on port 5001');
 })
+
+//My first commit
