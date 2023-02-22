@@ -26,7 +26,18 @@ const userSchema = new Schema({
     employee: {
         type: Boolean,
         default: true
-    }
+    },
+    seniority: {
+        type: Boolean
+    },
+    date: Date,
+    availability: [
+        {
+          start_time: Number, // UNIX timestamp
+          end_time: Number, // UNIX timestamp
+          is_available: Boolean
+        }
+      ]
 });
 
 userSchema.plugin(passportLocalMongoose);
