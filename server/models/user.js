@@ -1,35 +1,64 @@
-const mongoose = require('mongoose');
-const passportLocalMongoose = require('passport-local-mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
+const mongoose = require("mongoose");
+const passportLocalMongoose = require("passport-local-mongoose");
+const uniqueValidator = require("mongoose-unique-validator");
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-    username: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    phoneNumber: {
-        type: Number,
-        required: true,
-        unique: true
-    },
-    employer: {
+  first_name: {
+    type: String,
+    required: true,
+  },
+  last_name: {
+    type: String,
+    required: true,
+  },
+  username: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  employmentType: {
+    type: String,
+  },
+  phoneNumber: {
+    type: Number,
+    required: true,
+    unique: true,
+  },
+  employer: {
+    type: Boolean,
+    default: false,
+  },
+  employee: {
+    type: Boolean,
+    default: true,
+  },
+  seniority: {
+    type: Boolean,
+  },
+  availabilities: [
+    {
+      date: Date,
+      availability: String,
+      time: String,
+      status: {
         type: Boolean,
         default: false
+      }
     },
-    employee: {
-        type: Boolean,
-        default: true
-    }
+  ],
+  shifts: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Shift'
+  }]
 });
 
 userSchema.plugin(passportLocalMongoose);
 userSchema.plugin(uniqueValidator);
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);

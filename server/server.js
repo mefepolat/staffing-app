@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const mongoSanitize = require('express-mongo-sanitize');
 const LocalStrategy = require('passport-local');
 const cors = require('cors');
+const passport = require('passport');
 const MongoStore = require('connect-mongo');
 const session = require('express-session');
 const bodyParser = require('body-parser');
@@ -17,7 +18,7 @@ const passport = require('passport');
 
 app.use(
     cors({
-        origin: "http://localhost:3001",
+        origin: "http://localhost:3000",
         optionsSuccessStatus: 200,
         credentials: true
     })
@@ -45,6 +46,10 @@ const store = MongoStore.create({
     collectionName: 'sessions'
 });
 
+store.on('error', (err) => {
+    console.log('session store error', err);
+});
+
 const sessionConfig = {
     store: store,
     name: 'session',
@@ -67,16 +72,8 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-  });
-  
-  passport.deserializeUser((id, done) => {
-    User.findById(id, (err, user) => {
-      done(err, user);
-    });
-  });
-  
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 app.get('/api/session', (req,res) => {
     const session = req.session;
@@ -93,7 +90,7 @@ app.all('*', (req,res,next) => {
 });
 
 app.listen(5001, () => {
-    console.log('server is running on port 5001');
+    console.log('server is running on port 5000');
 })
 
 //My first commit
