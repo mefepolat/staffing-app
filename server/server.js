@@ -11,6 +11,9 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const User = require('./models/user');
 const ExpressError = require('./utils/ExpressError');
+const passport = require('passport');
+
+
 
 
 app.use(
@@ -89,3 +92,5 @@ app.all('*', (req,res,next) => {
 app.listen(5001, () => {
     console.log('server is running on port 5000');
 })
+
+//My first commit
