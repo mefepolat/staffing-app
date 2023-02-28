@@ -4,9 +4,10 @@ const passport = require('passport');
 
 module.exports.registerUser = async(req,res,next) => {
     try {
-        const {username, email, password, phoneNumber} = req.body;
-        const user = new User({username, email, phoneNumber});
+        const {firstName, lastName, username, email, password, phoneNumber} = req.body;
+        const user = new User({firstName, lastName, username, email, phoneNumber});
         const registeredUser = await User.register(user, password);
+        console.log(user)
         res.json(registeredUser);
     } catch (error) {
         res.json({
