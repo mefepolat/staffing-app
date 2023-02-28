@@ -1,4 +1,4 @@
-import { Form, Col, Row, Button } from "react-bootstrap";
+import { Form, Col, Row, Button, Container } from "react-bootstrap";
 import { useState } from "react";
 import {Formik} from 'formik';
 import * as yup from 'yup';
@@ -52,6 +52,7 @@ const SignUp = () => {
       
 
   return (
+    <Container className='text-center justify-content-center align-items-center h-100'>
     <Formik
     initialValues={{firstName: '', lastName: '', username:'', email: '', password:'', passwordConfirmation: '', phoneNumber:''}}
     validationSchema={schema}
@@ -67,7 +68,7 @@ const SignUp = () => {
             isValid,
             errors
         }) => (
-    <Form noValidate onSubmit={handleSubmit}>
+    <Form noValidate onSubmit={handleSubmit} className='mx-auto '>
       <Form.Group as={Row} className='mb-3' controlId='username'>
         <Form.Label column sm='1'>Username:</Form.Label>
         <Col sm='4'>
@@ -159,6 +160,7 @@ const SignUp = () => {
     </Form>
   )}
     </Formik>
+    </Container>
   );
 };
 

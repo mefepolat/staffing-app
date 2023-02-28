@@ -36,7 +36,7 @@ module.exports.login = (req,res,next) => {
 
             req.session.user = {
                 _id: user._id,
-                username: user.username,
+                email: user.email,
                 employer: user.employer
             };
 
