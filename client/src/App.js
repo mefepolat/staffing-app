@@ -1,14 +1,16 @@
 import './App.css';
-import  Button  from 'react-bootstrap/Button';
+
 import "bootstrap/dist/css/bootstrap.min.css.map";
 import Home from './home/pages/Home';
+import Navbar from './shared/components/Navbar';
 
 
 function App() {
   return (
    <>
-    <h1>Staffing App</h1>
-    <Button>button</Button>
+    <h1>Staffing Ai Network</h1>
+   
+    <Navbar/>
     <Home />
     </>
   );
