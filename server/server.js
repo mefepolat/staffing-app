@@ -69,7 +69,7 @@ app.use(mongoSanitize());
 app.use(passport.initialize());
 app.use(passport.session());
 
-passport.use(new LocalStrategy(User.authenticate()));
+passport.use(new LocalStrategy({usernameField: 'email'},User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
@@ -77,7 +77,7 @@ app.use('/api', userRoutes);
 
 app.get('/api/session', (req,res) => {
     const session = req.session;
-
+    
     if(session && session.user){
         res.json({loggedIn: true, user:session});
     } else {
