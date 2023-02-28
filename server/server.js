@@ -14,6 +14,7 @@ const ExpressError = require('./utils/ExpressError');
 const userRoutes = require('./routes/user');
 
 
+
 app.use(
     cors({
         origin: "http://localhost:3000",
@@ -92,3 +93,5 @@ app.all('*', (req,res,next) => {
 app.listen(5001, () => {
     console.log('server is running on port 5001');
 })
+
+//My first commit
