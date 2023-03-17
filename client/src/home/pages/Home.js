@@ -1,10 +1,10 @@
-import Calendar from "../components/Calendar";
+import FullCalendar from "../components/Calendar";
 
 
 const Home = () => {
     return (
         <div>
-            <Calendar />
+            <FullCalendar />
         </div>
     )
 }

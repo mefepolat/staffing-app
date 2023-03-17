@@ -1,51 +1,88 @@
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import { useEffect } from 'react';
+import {Calendar, momentLocalizer} from 'react-big-calendar';
+import moment from 'moment';
+import { useState, useMemo } from 'react'; 
+import "react-big-calendar/lib/css/react-big-calendar.css";
+const localizer = momentLocalizer(moment);
 
-const events = [ { id: 'd', title: 'Day', start: new Date()},
-{ id: 'e', title: 'Evening', start: new Date()},
-{ id: 'n', title: 'Night', start: new Date()}];
+const FullCalendar = () => {
 
-const resources = [ 
+    const [availabilities, setAvailabilities] = useState([]);
+
     
-]
+    const { defaultDate, formats } = useMemo(
+        () => ({
+          
+          formats: {
+            weekdayFormat: (date, culture, localizer) =>
+              localizer.format(date, 'dddd', culture),
+          },
+        }),
+        []
+      )
+    
 
-
-const Calendar = () => {
-    const handleDayClick = (dayEl, cell) => {
-        const shift = cell.getAttribute('data-shift');
+    const handleSelectSlot = ({start, end}) => {
+        const shift = prompt(
+            "Which shift are you available for? (day, evening or night)"
+        )
+        if(shift){
+            const availability = {
+                start,
+                end,
+                title: shift.trim().charAt(0).toUpperCase() + shift.slice(1)
+            };
+    
+            setAvailabilities([...availabilities, availability]);
+        }
+        
     }
 
-    useEffect(() => {
-        const shiftRows = document.querySelectorAll('.shift-row');
-        shiftRows.forEach(row => {
-            row.addEventListener('click', (event) => {
-                handleDayClick(event.target, event.target.parentNode);
-            });
-        });
-    });
-    
+    const dayPropGetter = (date) => {
+        return {
+            className: `weekday-${moment(date).format('ddd').toLowerCase()}`
+        }
+    }
 
+  
+
+    const eventStyleGetter = (event,start,end, isSelected) => {
+        return {
+            style: {
+                backgroundColor: event.color,
+                borderRadius: '0px',
+                opacity: '0.5',
+                color: 'black',
+                border: '0px',
+                display: 'block'
+            }
+        }
+    }
+    
+  
     return (
-        <div className='calendar'>
-            <FullCalendar
-            plugins={[dayGridPlugin]}
-            initialView='dayGridWeek'
-            weekends={false}
-            events={events}
-            eventContent={renderEventContent}
+        <div>
+            <Calendar
+            localizer={localizer}
+           
+            dayPropGetter={dayPropGetter}
+            startAccessor='start'
+            endAccessor='end'
+            formats={formats}
+            style={{height: 500}}
+            selectable={true}
+            onSelectSlot={handleSelectSlot}
+            events={availabilities}
+            eventPropGetter={eventStyleGetter}
+            components={{
+                timeSlotWrapper: ({children, style}) => (
+                    <div style={{...style, height:"33%"}}>{children}</div>
+                )
+            }}
+            show
             />
         </div>
     )
 }
 
-function renderEventContent(eventInfo){
-    return (
-        <>
-        <b>{eventInfo.timeText}</b>
-        <i>{eventInfo.event.title}</i>
-        </>
-    )
-}
 
-export default Calendar;
+export default FullCalendar;
