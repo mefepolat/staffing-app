@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import Cookies from 'js-cookie';
 import { fetchSession } from "../../utils/FetchSession";
+import { redirect } from "react-router";
 
 export const UserContext = createContext({
     user: null,
@@ -41,6 +42,7 @@ export const UserContext = createContext({
       setUser(null);
   
       Cookies.remove("session");
+      redirect('/');
     };
   
     return (

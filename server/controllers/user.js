@@ -38,7 +38,8 @@ module.exports.login = (req,res,next) => {
             req.session.user = {
                 _id: user._id,
                 email: user.email,
-                employer: user.employer
+                employer: user.employer,
+                availabilities: user.availabilities,
             };
 
             return res.json({session: req.session})
