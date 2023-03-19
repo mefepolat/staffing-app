@@ -6,6 +6,7 @@ import { useState, useMemo, useContext, useEffect } from "react";
 import { UserContext } from "../../shared/components/UserContext";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { getAvailability } from "../../utils/getAvailability";
+import { updateAvailability } from "../../utils/updateAvailability";
 const localizer = momentLocalizer(moment);
 
 const FullCalendar = () => {
@@ -14,6 +15,8 @@ const FullCalendar = () => {
   const [availabilities, setAvailabilities] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [shift, setShift] = useState("");
+  const [editMode, setEditMode] = useState(false);
+  const [eventId, setEventId] = useState("");
 
   const openModal = () => {
     setShowModal(true);
@@ -45,15 +48,31 @@ const FullCalendar = () => {
     }
   };
 
+  const handleEventClick = (eventClickInfo) => {
+    const eventStart = moment(eventClickInfo.start).format("YYYY-MM-DD");
+    const event = availabilities.find(
+      (availability) =>
+        moment(availability.date).format("YYYY-MM-DD") === eventStart
+    );
+    
+    setEventId(event._id);
+    setSelectedDate(event.date);
+    setShift(event.availability);
+    setShowModal(true);
+    setEditMode(true);
+   
+  };
+
+  const getAvailabilities = async () => {
+    const availabilities = await getAvailability(user);
+    setAvailabilities(availabilities);
+  };
+
   useEffect(() => {
-    const getAvailabilities = async () => {
-      if (user) {
-        setAvailabilities(await getAvailability(user));
-        console.log(availabilities);
-      }
-    };
-    getAvailabilities();
-  }, [user]);
+    if (user) {
+      getAvailabilities();
+    }
+  }, [user, showModal]);
 
   useEffect(() => {
     if (selectedDate) {
@@ -73,7 +92,17 @@ const FullCalendar = () => {
       alert("You cannot select a date more than 10 days in the future.");
       return;
     }
+    const isAvailabilityExists = availabilities.some((a) =>{
+      moment(a.date).isSame(startDate, "day")
+     
+    }
+    );
+    if (isAvailabilityExists) {
+      alert("An availability already exists for this date.");
+      return;
+    }
     setSelectedDate(startDate);
+    
   };
 
   const eventPropGetter = (event) => {
@@ -84,24 +113,33 @@ const FullCalendar = () => {
       color: "white",
       border: "none",
     };
-    if(event.start < new Date()){
-        style.opacity = 0.2;
-        style.backgroundColor = 'gray';
+    if (event.start < new Date()) {
+      style.opacity = 0.2;
+      style.backgroundColor = "gray";
     }
-    return {style};
+    return { style };
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    await addAvailability(user, shift, selectedDate);
     closeModal();
+    
+    if (editMode) {
+      await updateAvailability(user, shift, eventId);
+      return;
+    } else {
+      try {
+        await addAvailability(user, shift, selectedDate);
+      } catch (err) {
+        console.log(err);
+      }
+    }
   };
 
   return (
     <div>
       <Calendar
         localizer={localizer}
-        
         startAccessor="start"
         endAccessor="end"
         formats={formats}
@@ -111,8 +149,8 @@ const FullCalendar = () => {
         events={getAvailabilityEvents()}
         eventPropGetter={eventPropGetter}
         toolbar={true}
-        
         show
+        onSelectEvent={handleEventClick}
       />
       <Modal show={showModal} onHide={closeModal}>
         <Modal.Header closeButton>
