@@ -12,8 +12,9 @@ const cookieParser = require('cookie-parser');
 const User = require('./models/user');
 const ExpressError = require('./utils/ExpressError');
 const userRoutes = require('./routes/user');
+const availabilityRoutes = require('./routes/availability');
 
-
+app.use(bodyParser.json());
 
 app.use(
     cors({
@@ -62,7 +63,7 @@ const sessionConfig = {
     }
 };
 
-app.use(bodyParser.json());
+
 app.use(cookieParser());
 app.use(session(sessionConfig));
 app.use(express.urlencoded({extended: true}));
@@ -75,6 +76,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 app.use('/api', userRoutes);
+app.use('/api', availabilityRoutes);
 
 app.get('/api/session', (req,res) => {
     const session = req.session;
