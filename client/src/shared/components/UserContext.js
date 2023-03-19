@@ -18,7 +18,7 @@ export const UserContext = createContext({
         const session = await fetchSession();
   
         setUser(session || null);
-        console.log(session)
+        
       };
       checkLoginStatus();
     }, []);

@@ -13,7 +13,7 @@ export async function getAvailability(session){
             
         })
         const data = await response.json();
-        console.log(data)
+        
         return data;
     } catch (err) {
         console.log(err);
