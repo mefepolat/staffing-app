@@ -7,7 +7,10 @@ module.exports.addAvailability = async (req, res, next) => {
   }
   if (
     !shift ||
-    (shift.toLowerCase() !== "d" && shift !== "e" && shift !== "n")
+    (shift.toLowerCase() !== "d" &&
+      shift.toLowerCase() !== "e" &&
+      shift.toLowerCase() !== "n" &&
+      shift.toLowerCase() !== "n/a")
   ) {
     console.log(shift);
     return res.json({ message: "Invalid shift entry!" });
@@ -18,6 +21,14 @@ module.exports.addAvailability = async (req, res, next) => {
     return res.json({ message: "User not found!" });
   }
 
+  const existingAvailability = userAvailability.availabilities.find(
+    (availability) => availability.date.getTime() === new Date(date).getTime()
+  );
+  if (existingAvailability) {
+    return res.json({
+      message: "There is already an availability for this date!",
+    });
+  }
   userAvailability.availabilities.push({
     date: date,
     availability: shift,
@@ -37,16 +48,24 @@ module.exports.getAvailability = async (req, res, next) => {
 
 module.exports.updateAvailability = async (req, res, next) => {
   const { user, shift, eventId } = req.body;
+  console.log(shift);
+  if (!eventId) {
+    return res.json({ message: "Need an availability!" });
+  }
   if (!user) {
     return res.json({ message: "You need to be logged in." });
   }
   if (
     !shift ||
-    (shift.toLowerCase() !== "d" && shift !== "e" && shift !== "n")
+    (shift.toLowerCase() !== "d" &&
+      shift.toLowerCase() !== "e" &&
+      shift.toLowerCase() !== "n" &&
+      shift.toLowerCase() !== "n/a")
   ) {
+    console.log(shift);
     return res.json({ message: "Invalid shift entry!" });
   }
-  User.findOneAndUpdate(
+  const availability = User.findOneAndUpdate(
     {
       _id: user._id,
       availabilities: {
@@ -61,14 +80,17 @@ module.exports.updateAvailability = async (req, res, next) => {
       },
     },
     { new: true },
-    function (err, updatedUser) {
+    function (err) {
       if (err) {
-        console.log("error var agam");
         return res.json({ message: "Error updating availability." });
       } else {
         console.log("Availability updated successfully!");
+
         return res.json({ message: "Availability updated successfully!" });
       }
     }
   );
+  if (!availability) {
+    return res.json({ message: "No such availability found!" });
+  }
 };

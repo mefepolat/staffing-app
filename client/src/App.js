@@ -6,6 +6,7 @@ import NavBar from "./shared/components/NavBar";
 import SignUp from "./home/pages/SignUp";
 import SignIn from "./home/pages/SignIn";
 import { AuthProvider } from "./shared/components/UserContext";
+import AdminPage from "./admin/pages/Admin";
 
 function App() {
   return (
@@ -18,7 +19,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<SignUp />} />
             <Route path="/login" element={<SignIn />} />
-
+            <Route path="/admin" element={<AdminPage />} />
             <Route path="*" element={<Navigate to='/' />} />
           </Routes>
         </BrowserRouter>

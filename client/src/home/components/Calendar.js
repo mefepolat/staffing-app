@@ -25,6 +25,7 @@ const FullCalendar = () => {
   const closeModal = () => {
     setSelectedDate("");
     setShift(null);
+    setEditMode(false);
     setShowModal(false);
   };
 
@@ -49,18 +50,22 @@ const FullCalendar = () => {
   };
 
   const handleEventClick = (eventClickInfo) => {
+    const today = new Date();
+    today.setHours(0,0,0,0);
     const eventStart = moment(eventClickInfo.start).format("YYYY-MM-DD");
+    const eventDate = new Date(eventStart);
     const event = availabilities.find(
       (availability) =>
         moment(availability.date).format("YYYY-MM-DD") === eventStart
     );
-    
+
     setEventId(event._id);
     setSelectedDate(event.date);
+    
+    
     setShift(event.availability);
     setShowModal(true);
     setEditMode(true);
-   
   };
 
   const getAvailabilities = async () => {
@@ -92,17 +97,14 @@ const FullCalendar = () => {
       alert("You cannot select a date more than 10 days in the future.");
       return;
     }
-    const isAvailabilityExists = availabilities.some((a) =>{
+    const isAvailabilityExists = availabilities.some((a) =>
       moment(a.date).isSame(startDate, "day")
-     
-    }
     );
     if (isAvailabilityExists) {
       alert("An availability already exists for this date.");
       return;
     }
     setSelectedDate(startDate);
-    
   };
 
   const eventPropGetter = (event) => {
@@ -117,13 +119,16 @@ const FullCalendar = () => {
       style.opacity = 0.2;
       style.backgroundColor = "gray";
     }
+    if(event.title === "N/A") {
+        style.backgroundColor = "red";
+    }
+   
     return { style };
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     closeModal();
-    
     if (editMode) {
       await updateAvailability(user, shift, eventId);
       return;
@@ -182,6 +187,14 @@ const FullCalendar = () => {
               onChange={() => setShift("n")}
             />{" "}
             Night Shift - 12:00 AM to 08:00 AM <br />
+            <input
+              type="radio"
+              name="shift"
+              value="n/a"
+              checked={shift === "n/a"}
+              onChange={() => setShift("n/a")}
+            />{" "}
+            N/A -- Not Available For The Shift <br />
           </div>
         </Modal.Body>
         <Modal.Footer>
