@@ -5,6 +5,9 @@ import SignOutButton from "./SignOutButton";
 
 const NavBar = () => {
   const { user } = useContext(UserContext);
+  if(user){
+    console.log(user.user.employer)
+  }
   return (
     <Navbar className="justify-content-end" sticky="top" bg="light" expand="md">
       <Container>
@@ -13,7 +16,16 @@ const NavBar = () => {
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="justify-content-center">
             {user ? (
-              <SignOutButton />
+                <>
+                {user.user.employer && (
+                  <Nav.Item>
+                    <Nav.Link href="/admin">Manage</Nav.Link>
+                  </Nav.Item>
+                )}
+                <Nav.Item>
+                  <SignOutButton />
+                </Nav.Item>
+              </>
             ) : (
               <>
                 <Nav.Item>
