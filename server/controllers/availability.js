@@ -7,10 +7,10 @@ module.exports.addAvailability = async (req, res, next) => {
   }
   if (
     !shift ||
-    (shift.toLowerCase() !== "d" &&
-      shift.toLowerCase() !== "e" &&
-      shift.toLowerCase() !== "n" &&
-      shift.toLowerCase() !== "n/a")
+    (shift.trim().toLowerCase() !== "d" &&
+      shift.trim().toLowerCase() !== "e" &&
+      shift.trim().toLowerCase() !== "n" &&
+      shift.trim().toLowerCase() !== "n/a")
   ) {
     console.log(shift);
     return res.json({ message: "Invalid shift entry!" });
@@ -48,7 +48,7 @@ module.exports.getAvailability = async (req, res, next) => {
 
 module.exports.updateAvailability = async (req, res, next) => {
   const { user, shift, eventId } = req.body;
-  console.log(shift);
+  
   if (!eventId) {
     return res.json({ message: "Need an availability!" });
   }
@@ -57,12 +57,12 @@ module.exports.updateAvailability = async (req, res, next) => {
   }
   if (
     !shift ||
-    (shift.toLowerCase() !== "d" &&
-      shift.toLowerCase() !== "e" &&
-      shift.toLowerCase() !== "n" &&
-      shift.toLowerCase() !== "n/a")
+    (shift.trim().toLowerCase() !== "d" &&
+      shift.trim().toLowerCase() !== "e" &&
+      shift.trim().toLowerCase() !== "n" &&
+      shift.trim().toLowerCase() !== "n/a")
   ) {
-    console.log(shift);
+   
     return res.json({ message: "Invalid shift entry!" });
   }
   const availability = User.findOneAndUpdate(
@@ -84,7 +84,7 @@ module.exports.updateAvailability = async (req, res, next) => {
       if (err) {
         return res.json({ message: "Error updating availability." });
       } else {
-        console.log("Availability updated successfully!");
+       
 
         return res.json({ message: "Availability updated successfully!" });
       }

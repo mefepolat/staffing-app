@@ -51,13 +51,16 @@ const FullCalendar = () => {
 
   const handleEventClick = (eventClickInfo) => {
     const today = new Date();
-    today.setHours(0,0,0,0);
+    
     const eventStart = moment(eventClickInfo.start).format("YYYY-MM-DD");
-    const eventDate = new Date(eventStart);
     const event = availabilities.find(
       (availability) =>
         moment(availability.date).format("YYYY-MM-DD") === eventStart
     );
+        if(eventClickInfo.start < today){
+            alert("You cannot edit past shifts!");
+            return;
+        }
 
     setEventId(event._id);
     setSelectedDate(event.date);

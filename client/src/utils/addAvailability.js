@@ -9,7 +9,7 @@ export async function addAvailability(session, shift, date) {
       },
       body: JSON.stringify({user,shift,date})
     });
-    console.log(shift)
+    
     return response;
   } catch (err) {
     console.log(err);

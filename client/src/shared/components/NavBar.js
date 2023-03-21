@@ -5,9 +5,7 @@ import SignOutButton from "./SignOutButton";
 
 const NavBar = () => {
   const { user } = useContext(UserContext);
-  if(user){
-    console.log(user.user.employer)
-  }
+ 
   return (
     <Navbar className="justify-content-end" sticky="top" bg="light" expand="md">
       <Container>
