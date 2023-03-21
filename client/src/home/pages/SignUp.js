@@ -1,6 +1,7 @@
 import { Form, Col, Row, Button, Container } from "react-bootstrap";
 import {Formik} from 'formik';
 import * as yup from 'yup';
+import {redirect} from 'react-router';
 
 const schema = yup.object().shape({
     firstName: yup.string().required('Required.'),
@@ -33,6 +34,7 @@ const SignUp = () => {
           console.log(data);
           if (response.ok) {
             console.log("form submission complete");
+            redirect('/');
           } else {
             throw new Error("Error submitting form");
           }
