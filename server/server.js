@@ -13,6 +13,7 @@ const User = require('./models/user');
 const ExpressError = require('./utils/ExpressError');
 const userRoutes = require('./routes/user');
 const availabilityRoutes = require('./routes/availability');
+const employeeRoutes = require('./routes/employees');
 
 app.use(bodyParser.json());
 
@@ -77,6 +78,7 @@ passport.deserializeUser(User.deserializeUser());
 
 app.use('/api', userRoutes);
 app.use('/api', availabilityRoutes);
+app.use('/api', employeeRoutes);
 
 app.get('/api/session', (req,res) => {
     const session = req.session;
