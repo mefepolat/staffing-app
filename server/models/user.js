@@ -39,7 +39,7 @@ const userSchema = new Schema({
     default: true,
   },
   seniority: {
-    type: Boolean,
+    type: Number,
   },
   availabilities: [
     {
