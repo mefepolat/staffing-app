@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { getEmployees } from "../../utils/getEmployees";
-import * as yup from "yup";
 import { updateEmployee } from "../../utils/updateEmployee";
 
 function Employees() {

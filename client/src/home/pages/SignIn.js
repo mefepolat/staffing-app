@@ -35,7 +35,7 @@ const SignIn = () => {
     }
 
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form className="container-fluid" onSubmit={handleSubmit}>
             <Form.Group controlId='email'>
                 <Form.Label>Email:</Form.Label>
                 <Form.Control
