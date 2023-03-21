@@ -1,6 +1,11 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { UserContext } from '../../shared/components/UserContext';
 
 function Sidebar(props) {
+    const {user} = useContext(UserContext);
+    
+    
+   
     const {setCurrentPage} = props;
     const handleClick = (page) => {
         setCurrentPage(page);
@@ -9,7 +14,7 @@ function Sidebar(props) {
     <div className='bg-white sidebar p-2'>
         <div className='m-2'>
             <i className='bi bi-bootstrap-fill me-3 fs-4'></i>
-            <span className='brand-name fs-4'>Username Here</span>
+            <span className='brand-name fs-4'>{user ? user.user.username : 'Welcome'}</span>
         </div>
         <hr className='text-dark' />
         <div className='list-group list-group-flush'>
