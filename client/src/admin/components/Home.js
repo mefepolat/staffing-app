@@ -7,8 +7,12 @@ function Home() {
   const { user } = useContext(UserContext);
   const [selectedDate, setSelectedDate] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const [shift, setShift] = useState("");
+  const [shift, setShift] = useState("d");
   const localizer = momentLocalizer(moment);
+  const [executionTime, setExecutionTime] = useState("");
+  const [orderOfExecution, setOrderOfExecution] = useState("");
+  const [executionTimeUnit, setExecutionTimeUnit] = useState("hours");
+
   const { formats } = useMemo(
     () => ({
       formats: {
@@ -18,6 +22,18 @@ function Home() {
     }),
     []
   );
+
+  const handleExecutionTimeUnitChange = (event) => {
+    setExecutionTimeUnit(event.target.value);
+  };
+
+  const handleExecutionTimeChange = (event) => {
+    setExecutionTime(event.target.value);
+  };
+
+  const handleOrderOfExecutionChange = (event) => {
+    setOrderOfExecution(event.target.value);
+  };
 
   useEffect(() => {
     if (selectedDate) {
@@ -32,7 +48,7 @@ function Home() {
   const closeModal = () => {
     setSelectedDate("");
     setShift(null);
-    
+
     setShowModal(false);
   };
   const handleSelectSlot = ({ start, end }) => {
@@ -47,14 +63,13 @@ function Home() {
       alert("You cannot select a date more than 30 days in the future.");
       return;
     }
-    
-    
+
     setSelectedDate(startDate);
   };
 
   const handleSubmit = () => {
     return;
-  }
+  };
 
   const eventPropGetter = (event) => {
     const style = {
@@ -68,16 +83,16 @@ function Home() {
       style.opacity = 0.2;
       style.backgroundColor = "gray";
     }
-    if(event.title === "D") {
-        style.backgroundColor = "lightblue";
+    if (event.title === "D") {
+      style.backgroundColor = "lightblue";
     }
-    if(event.title === "E") {
-        style.backgroundColor = "darkblue";
+    if (event.title === "E") {
+      style.backgroundColor = "darkblue";
     }
-    if(event.title === "N") {
-        style.backgroundColor = "darkblue";
+    if (event.title === "N") {
+      style.backgroundColor = "darkblue";
     }
-   
+
     return { style };
   };
 
@@ -99,7 +114,7 @@ function Home() {
       </div>
       <Modal show={showModal} onHide={closeModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Select Shift</Modal.Title>
+          <Modal.Title>Create New Shift</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div>
@@ -127,14 +142,41 @@ function Home() {
               onChange={() => setShift("n")}
             />{" "}
             Night Shift - 12:00 AM to 08:00 AM <br />
-            <input
-              type="radio"
-              name="shift"
-              value="n/a"
-              checked={shift === "n/a"}
-              onChange={() => setShift("n/a")}
-            />{" "}
-            N/A -- Not Available For The Shift <br />
+            <label>
+              <div className="d-flex align-items-center">
+                Execution Time:
+                <select
+                  className="form-select ms-2"
+                  value={executionTimeUnit}
+                  onChange={handleExecutionTimeUnitChange}
+                >
+                  <option value="hours">hour(s)</option>
+                  <option value="minutes">minute(s)</option>
+                </select>
+              </div>
+              <input
+                className="m-1"
+                type="number"
+                value={executionTime}
+                onChange={handleExecutionTimeChange}
+                required
+              />
+            </label>
+            <br />
+            <label>
+              Order of Execution:
+              <select
+                className="m-1"
+                value={orderOfExecution}
+                onChange={handleOrderOfExecutionChange}
+                required
+              >
+                <option value="">--Select One--</option>
+                <option value="seniority">Seniority based</option>
+                <option value="rotating">One Rotating List</option>
+                <option value="eft">EFT</option>
+              </select>
+            </label>
           </div>
         </Modal.Body>
         <Modal.Footer>
@@ -142,7 +184,7 @@ function Home() {
             Cancel
           </Button>
           <Button variant="primary" onClick={handleSubmit}>
-            Submit
+            Add Shift
           </Button>
         </Modal.Footer>
       </Modal>

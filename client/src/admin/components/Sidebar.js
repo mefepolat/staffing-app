@@ -1,15 +1,20 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState } from 'react'
 import { UserContext } from '../../shared/components/UserContext';
 
 function Sidebar(props) {
     const {user} = useContext(UserContext);
-    
+    const [selectedPage, setSelectedPage] = useState('');
     
    
     const {setCurrentPage} = props;
     const handleClick = (page) => {
         setCurrentPage(page);
+        setSelectedPage(page);
     }
+
+    const isSelected = (page) => {
+        return page === selectedPage ? 'selected' : '';
+    };
   return (
     <div className='bg-white sidebar p-2'>
         <div className='m-2'>
@@ -18,19 +23,19 @@ function Sidebar(props) {
         </div>
         <hr className='text-dark' />
         <div className='list-group list-group-flush'>
-            <a className='list-group-item py-2' onClick={() => handleClick('dashboard')}>
+            <a className={`list-group-item py-2 ${isSelected('dashboard')}`} onClick={() => handleClick('dashboard')}>
                 <i className='bi bi-speedometer2 fs-5 me-3'></i>
                 <span className='fs-5'>Dashboard</span>
             </a>
-            <a className='list-group-item py-2' onClick={() => handleClick('home')}>
+            <a className={`list-group-item py-2 ${isSelected('home')}`} onClick={() => handleClick('home')}>
                 <i className='bi bi-house fs-5 me-3'></i>
                 <span className='fs-5'>Home</span>
             </a>
-            <a className='list-group-item py-2' onClick={() => handleClick('employees')}>
+            <a className={`list-group-item py-2 ${isSelected('employees')}`} onClick={() => handleClick('employees')}>
                 <i className='bi bi-people fs-5 me-3'></i>
                 <span className='fs-5'>Employees</span>
             </a>
-            <a className='list-group-item py-2' onClick={() => handleClick('shifts')}>
+            <a className={`list-group-item py-2 ${isSelected('shifts')}`} onClick={() => handleClick('shifts')}>
                 <i className='bi bi-table fs-5 me-3'></i>
                 <span className='fs-5'>Shifts</span>
                 

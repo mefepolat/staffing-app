@@ -3,8 +3,8 @@ const Schema = mongoose.Schema;
 
 
 const shiftSchema = new Schema({
-    start_date: Date,
-    end_date: Date,
+    date: Date,
+    shift_type: String,
     requiredEmployees: Number,
     approvedEmployees:[{
         type: Schema.Types.ObjectId,

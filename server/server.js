@@ -80,6 +80,7 @@ app.use('/api', userRoutes);
 app.use('/api', availabilityRoutes);
 app.use('/api', employeeRoutes);
 
+
 app.get('/api/session', (req,res) => {
     const session = req.session;
     

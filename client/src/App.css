@@ -1,5 +1,14 @@
 .list-group a:hover {
-    background-color: blue;
+    background-color: #007bff;
     color: white;
     cursor: pointer;
 }
+
+.sidebar .list-group-item.selected {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .sidebar .list-group-item.selected i {
+    color: #fff;
+  }
